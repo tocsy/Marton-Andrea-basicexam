@@ -14,6 +14,8 @@ function successAjax(xhttp) {
   var userDatas = JSON.parse(xhttp.responseText);
   console.log(userDatas);
   sortSpaceshipsByCostInCredits(userDatas);
+  deleteNullConsumables(userDatas);
+  console.log("Array after delete: " + deleteNullConsumables(userDatas));
   createHtmlElements(userDatas);
 
   var searchbuttonElement = document.querySelector('#search-button');
@@ -45,9 +47,15 @@ function sortSpaceshipsByCostInCredits(spaceships) {
 
 
 // Töröld az összes olyan adatot, ahol a consumables értéke NULL. Fontos, hogy ne csak undefined-ra állítsd a tömbelemet!!!
-// function deleteNullConsumables(spaceships) {
+function deleteNullConsumables(spaceships) {
 
-//   for (var i = 0; i < spaceships.length; i++) {
+  for (var i = spaceships.length - 1; i >= 0; i--) {
+    if (spaceships[i].consumables == null) {
+      spaceships.splice(i, 1);
+    }
+  }
+  return spaceships;
+}
 
 
 
@@ -78,32 +86,13 @@ function createHtmlElements(spaceships) {
 
     var cardDivElementDetails = document.createElement("div");
     cardDivElementDetails.classList.add("model-spaceship");
-    cardDivElement.appendChild(cardDivElementName);
+    cardDivElement.appendChild(cardDivElementDetails);
 
     var s = '';
     for (var member in spaceships[i]) {
       s += member + ': ' + spaceships[i][member] + '<br/>';
     }
-    cardDivElementDetails.innerText = s;
-
-
-
-
-    // var cardDivElementConsumables = document.createElement("div");
-    // cardDivElementConsumables.classList.add("consumables-spaceship");
-    // cardDivElement.appendChild(cardDivElementConsumables);
-    // cardDivElementConsumables.innerText = spaceships[i].consumables;
-
-    // var cardDivElementDenomination = document.createElement("div");
-    // cardDivElementDenomination.classList.add("denomination-spaceship");
-    // cardDivElement.appendChild(cardDivElementConsumables);
-    // cardDivElementDenomination.innerText = spaceships[i].denomination;
-
-
-    // var cardDivElementCargoCapacity = document.createElement("div");
-    // cardDivElementCargoCapacity.classList.add("cargo_capacity-spaceship");
-    // cardDivElement.appendChild(cardDivElementCargoCapacity);
-    // cardDivElementCargoCapacity.innerText = spaceships[i].cargo_capacity;
+    cardDivElementDetails.innerHTML = s;
 
 
   }
@@ -123,13 +112,20 @@ function statistic(spaceships) {
     if (spaceships[i].crew == 1) {
       darab++;
     }
-
   }
+
+  var max = spaceships[0].cargo_capacity;
+  for (var i = 1; i < spaceships.length; i++) {
+    if (spaceships[i].cargo_capacity > max) {
+      max = spaceships[i];
+    }
+  };
+
 
 
   var StatisticDivElement = document.createElement('div');
   spaceshipListDivElement.appendChild(StatisticDivElement);
-  StatisticDivElement.innerText = s;
+  StatisticDivElement.innerHTML = "Egy fős legénységgel rendelkező hajók darabszáma: " + darab + "<br>" + "A legnagyobb cargo_capacity-vel rendelkező hajó neve: " + max + "<br>"
 
 
 };
