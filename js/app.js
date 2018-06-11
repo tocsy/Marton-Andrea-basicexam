@@ -20,6 +20,8 @@ function successAjax(xhttp) {
   searchbuttonElement.addEventListener('click', function () {
     searchCharacter(userDatas);
   }, false);
+
+  statistic(userDatas);
 }
 
 getData('/json/spaceships.json', successAjax);
@@ -48,16 +50,6 @@ function sortSpaceshipsByCostInCredits(spaceships) {
 //   for (var i = 0; i < spaceships.length; i++) {
 
 
-//   }
-//   if (spaceships.){
-
-
-//   };
-
-
-
-// };
-
 
 // Az összes NULL értéket (minden objektum minden tulajdonságánál) módosítsd "unknown"-ra
 
@@ -83,38 +75,38 @@ function createHtmlElements(spaceships) {
     cardDivElementName.classList.add("model-spaceship");
     cardDivElement.appendChild(cardDivElementName);
     cardDivElementName.innerText = spaceships[i].model;
+
+    var cardDivElementDetails = document.createElement("div");
+    cardDivElementDetails.classList.add("model-spaceship");
+    cardDivElement.appendChild(cardDivElementName);
+
+    var s = '';
+    for (var member in spaceships[i]) {
+      s += member + ': ' + spaceships[i][member] + '<br/>';
+    }
+    cardDivElementDetails.innerText = s;
+
+
+
+
+    // var cardDivElementConsumables = document.createElement("div");
+    // cardDivElementConsumables.classList.add("consumables-spaceship");
+    // cardDivElement.appendChild(cardDivElementConsumables);
+    // cardDivElementConsumables.innerText = spaceships[i].consumables;
+
+    // var cardDivElementDenomination = document.createElement("div");
+    // cardDivElementDenomination.classList.add("denomination-spaceship");
+    // cardDivElement.appendChild(cardDivElementConsumables);
+    // cardDivElementDenomination.innerText = spaceships[i].denomination;
+
+
+    // var cardDivElementCargoCapacity = document.createElement("div");
+    // cardDivElementCargoCapacity.classList.add("cargo_capacity-spaceship");
+    // cardDivElement.appendChild(cardDivElementCargoCapacity);
+    // cardDivElementCargoCapacity.innerText = spaceships[i].cargo_capacity;
+
+
   }
-
-  // var cardDivElementConsumables = document.createElement("div");
-  // cardDivElementConsumables.classList.add("consumables-spaceship");
-  // cardDivElement.appendChild(cardDivElementConsumables);
-  // cardDivElementConsumables.innerText = spaceships[i].consumables;
-
-  // var cardDivElementConsumables = document.createElement("div");
-  // cardDivElementConsumables.classList.add("consumables-spaceship");
-  // cardDivElement.appendChild(cardDivElementConsumables);
-  // cardDivElementConsumables.innerText = spaceships[i].consumables;
-
-
-  // "denomination": "CR90 corvette",
-  // "cargo_capacity": "3000000",
-  // "passengers": "600",
-  // "max_atmosphering_speed": "950",
-  // "crew": "165",
-  // "lengthiness": "150",
-  // "model": "CR90 corvette",
-  // "cost_in_credits": "3500000",
-  // "manufacturer": "Corellian Engineering Corporation",
-  // "image": "cr90_corvette.jpg"
-
-
-
-  //   var s = '';
-  //   for (var member in spaceships[i]) {
-  //     s += member + ': ' + spaceships[i][member] + '<br/>';
-  //   }
-  //   cardDivElementDetails.innerHTML = s;
-  // }
 };
 
 
@@ -123,7 +115,24 @@ function createHtmlElements(spaceships) {
 // -A legnagyobb cargo_capacity-vel rendelkező hajó neve (model)
 // -Az összes hajó utasainak (passengers) összesített száma
 // -A leghosszabb(lengthiness) hajó képe
+function statistic(spaceships) {
+  var spaceshipListDivElement = document.querySelector(".shapceship-list");
 
+  var darab = 0;
+  for (var i = 0; i < spaceships.length; i++) {
+    if (spaceships[i].crew == 1) {
+      darab++;
+    }
+
+  }
+
+
+  var StatisticDivElement = document.createElement('div');
+  spaceshipListDivElement.appendChild(StatisticDivElement);
+  StatisticDivElement.innerText = s;
+
+
+};
 
 
 
@@ -158,17 +167,17 @@ function updateDetailsPanelBySpaceship(spaceships) {
 };
 
 function searchCharacter(spaceships) {
-  var searchTextBox = document.querySelector("#panel footer input")
+  var searchTextBox = document.querySelector("#search-text")
   var filter = searchTextBox.value;
 
-  if (filter == '') {
-    return;
-  };
+  // if (filter == '') {
+  //   return;
+  // };
 
   var filtered;
 
   for (var i = 0; i < spaceships.length; i++) {
-    if (spaceships[i].name.toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+    if (spaceships[i].model.toLowerCase().indexOf(filter.toLowerCase()) != -1) {
       filtered = (spaceships[i]);
       break;
     }
@@ -176,7 +185,7 @@ function searchCharacter(spaceships) {
   if (filtered) {
     updateDetailsPanelBySpaceship(filtered)
   } else {
-    var detailsDivElement = document.querySelector("#details");
+    var detailsDivElement = document.querySelector(".one-spaceship");
     detailsDivElement.innerText = "Character not found";
   }
 };

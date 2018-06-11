@@ -83,4 +83,7 @@ div {
     cursor: pointer;
     border: 1px solid black;
   }
+  .card>.image-spaceship {
+    width: 30%;
+  }
 }
