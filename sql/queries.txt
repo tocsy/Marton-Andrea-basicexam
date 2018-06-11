@@ -12,7 +12,7 @@ ORDER BY cargo_capacity DESC
 LIMIT 3
 
 
-3. csak a crew=1-re szűrtem, mert nem volt teljesen érthető a kérdés, hogy mindennek 1-es értéket kell-e adni, vagy azok a kimenűfeltételre vonatkoztak:
+3. csak a crew=1-re szűrtem, mert nem volt teljesen érthető a kérdés, hogy mindennek 1-es értéket kell-e adni, vagy azok a kimenőfeltételre vonatkoztak. Itt kimenőfeltételként adtam meg a felsorolt mezőket:
 SELECT model AS Típus, cargo_capacity, passengers, max_atmosphering_speed,crew
 FROM transport
 WHERE crew = 1
@@ -58,4 +58,6 @@ AND cargo_capacity IS NOT NULL
 AND cargo_capacity <> 0
 ORDER BY crew
 limit 3
+
+
 
