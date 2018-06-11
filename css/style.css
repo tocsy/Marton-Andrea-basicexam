@@ -80,7 +80,6 @@ div {
   .card {
     text-align: center;
     display: inline-block;
-    cursor: pointer;
   }
   .card>.image-spaceship {
     width: 30%;

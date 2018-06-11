@@ -20,6 +20,12 @@ function successAjax(xhttp) {
 
 
   statistic(userDatas);
+
+  var searchbuttonElement = document.querySelector('#search-button');
+  searchbuttonElement.addEventListener('click', function () {
+    searchSpaceship(userDatas);
+  }, false);
+
 }
 
 getData('/json/spaceships.json', successAjax);
@@ -102,6 +108,10 @@ function createHtmlElements(spaceships) {
 function statistic(spaceships) {
   var spaceshipListDivElement = document.querySelector(".shapceship-list");
 
+  var StatisticDivHeader = document.createElement('h1');
+  spaceshipListDivElement.appendChild(StatisticDivHeader);
+  StatisticDivHeader.innerText = "Statistic:"
+
   var darab = 0;
   for (var i = 0; i < spaceships.length; i++) {
     if (spaceships[i].crew == 1) {
@@ -109,34 +119,36 @@ function statistic(spaceships) {
     }
   }
 
-  var max = spaceships[0].cargo_capacity;
+  var max = spaceships[0];
   for (var i = 1; i < spaceships.length; i++) {
     if (spaceships[i].cargo_capacity > max) {
       max = spaceships[i];
     }
   };
 
-
   var allPassangers = 0;
   for (var i = 0; i < spaceships.length; i++) {
-    allPassangers += parseInt(spaceships[i].passengers);
+    if (spaceships[i].passengers !== null)
+      allPassangers += parseInt(spaceships[i].passengers);
   }
-  console.log(allPassangers);
-
 
   var StatisticDivElement = document.createElement('div');
   spaceshipListDivElement.appendChild(StatisticDivElement);
-  StatisticDivElement.innerHTML = "Egy fős legénységgel rendelkező hajók darabszáma: " + darab + "<br>" + "A legnagyobb cargo_capacity-vel rendelkező hajó neve: " + max + "<br>" + "Az összes hajó utasainak összesített száma: " + allPassangers + "<br>" + "A leghosszabb hajó képe: "
+  StatisticDivElement.innerHTML = "Egy fős legénységgel rendelkező hajók darabszáma: " + darab + "<br>" + "A legnagyobb cargo_capacity-vel rendelkező hajó neve: " + max.model + "<br>" + "Az összes hajó utasainak összesített száma: " + allPassangers + " fő" + "<br>" + "A leghosszabb hajó képe: ";
 
-  var allPassangers = 0;
-  for (var i = 0; i < spaceships.length; i++) {
-    allPassangers += parseInt(spaceships[i].passengers);
-  }
+  var maxLengthiness = spaceships[0];
+  for (var i = 1; i < spaceships.length; i++) {
+    if (spaceships[i].lengthiness !== null) {
+      if (parseInt(spaceships[i].lengthiness) > parseInt(maxLengthiness.lengthiness)) {
+        maxLengthiness = spaceships[i]
+      }
+    }
+  };
 
   var StatisticDivElementImage = document.createElement('img');
   spaceshipListDivElement.appendChild(StatisticDivElementImage);
-  StatisticDivElementImage.src = "img/" + spaceships[i].image;
-  StatisticDivElementImage.alt = spaceships[i].model;
+  StatisticDivElementImage.src = "img/" + maxLengthiness.image;
+  StatisticDivElementImage.alt = maxLengthiness.model;
 
 };
 
@@ -149,30 +161,33 @@ function statistic(spaceships) {
 // * Ha több találatunk is lenne, nem foglalkozunk velük, az első találat eredményét (tehát az első megfelelő névvel rendelkező hajó adatait) adjuk vissza.
 // * Az adott hajó adatait a one-spaceship class-ű div-be kell megjeleníteni rendezett formában, képpel együtt.
 
-function updateDetailsPanelBySpaceship(spaceships) {
+function updateDetailsPanelBySpaceship(spaceship) {
   var detailsDivElement = document.querySelector(".one-spaceship");
-  // while (detailsDivElement.firstChild) {
-  //   detailsDivElement.removeChild(detailsDivElement.firstChild);
-  // }
+  while (detailsDivElement.firstChild) {
+    detailsDivElement.removeChild(detailsDivElement.firstChild);
+  }
 
   var detailsDivElementImage = document.createElement('img');
   detailsDivElement.appendChild(detailsDivElementImage);
-  detailsDivElementImage.src = "img/" + spaceships[i].image;
-  detailsDivElementImage.alt = spaceships[i].model;
+  detailsDivElementImage.src = "img/" + spaceship.image;
+  detailsDivElementImage.alt = spaceship.model;
 
   var detailsDivElementName = document.createElement('div');
   detailsDivElement.appendChild(detailsDivElementName);
-  detailsDivElementName.classList.add("spaceshipName")
-  detailsDivElementName.innerText = spaceships[i].model;
+  detailsDivElementName.innerText = spaceship.model;
 
-  // var detailsDivElementBio = document.createElement('div');
-  // detailsDivElement.appendChild(detailsDivElementBio);
-  // detailsDivElementBio.classList.add("characterDetials")
-  // detailsDivElementBio.innerText = spaceships.bio;
+  // var detailsDivElementDetails = document.createElement("div");
+  // detailsDivElement.appendChild(detailsDivElementDetails);
+
+  // var s = '';
+  // for (var member in spaceships[i]) {
+  //   s += member + ': ' + spaceships[i][member] + '<br/>';
+  // }
+  // detailsDivElementDetails.innerHTML = s;
 
 };
 
-function searchCharacter(spaceships) {
+function searchSpaceship(spaceships) {
   var searchTextBox = document.querySelector("#search-text")
   var filter = searchTextBox.value;
 
@@ -192,6 +207,6 @@ function searchCharacter(spaceships) {
     updateDetailsPanelBySpaceship(filtered)
   } else {
     var detailsDivElement = document.querySelector(".one-spaceship");
-    detailsDivElement.innerText = "Character not found";
+    detailsDivElement.innerText = "Spaceship not found";
   }
 };
