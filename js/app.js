@@ -15,13 +15,9 @@ function successAjax(xhttp) {
   console.log(userDatas);
   sortSpaceshipsByCostInCredits(userDatas);
   deleteNullConsumables(userDatas);
-  console.log("Array after delete: " + deleteNullConsumables(userDatas));
+  console.log(userDatas);
   createHtmlElements(userDatas);
 
-  var searchbuttonElement = document.querySelector('#search-button');
-  searchbuttonElement.addEventListener('click', function () {
-    searchCharacter(userDatas);
-  }, false);
 
   statistic(userDatas);
 }
@@ -56,7 +52,6 @@ function deleteNullConsumables(spaceships) {
   }
   return spaceships;
 }
-
 
 
 // Az összes NULL értéket (minden objektum minden tulajdonságánál) módosítsd "unknown"-ra
@@ -122,11 +117,26 @@ function statistic(spaceships) {
   };
 
 
+  var allPassangers = 0;
+  for (var i = 0; i < spaceships.length; i++) {
+    allPassangers += parseInt(spaceships[i].passengers);
+  }
+  console.log(allPassangers);
+
 
   var StatisticDivElement = document.createElement('div');
   spaceshipListDivElement.appendChild(StatisticDivElement);
-  StatisticDivElement.innerHTML = "Egy fős legénységgel rendelkező hajók darabszáma: " + darab + "<br>" + "A legnagyobb cargo_capacity-vel rendelkező hajó neve: " + max + "<br>"
+  StatisticDivElement.innerHTML = "Egy fős legénységgel rendelkező hajók darabszáma: " + darab + "<br>" + "A legnagyobb cargo_capacity-vel rendelkező hajó neve: " + max + "<br>" + "Az összes hajó utasainak összesített száma: " + allPassangers + "<br>" + "A leghosszabb hajó képe: "
 
+  var allPassangers = 0;
+  for (var i = 0; i < spaceships.length; i++) {
+    allPassangers += parseInt(spaceships[i].passengers);
+  }
+
+  var StatisticDivElementImage = document.createElement('img');
+  spaceshipListDivElement.appendChild(StatisticDivElementImage);
+  StatisticDivElementImage.src = "img/" + spaceships[i].image;
+  StatisticDivElementImage.alt = spaceships[i].model;
 
 };
 
