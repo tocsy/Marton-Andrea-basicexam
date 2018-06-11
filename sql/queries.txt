@@ -1,0 +1,61 @@
+1.
+SELECT manufacturer AS gyártó, count(*) as darabszám
+FROM transport
+GROUP BY manufacturer
+
+
+2.
+SELECT model AS model_neve, manufacturer AS gyártó, image AS kép 
+FROM transport
+WHERE cargo_capacity IS NOT NULL
+ORDER BY cargo_capacity DESC
+LIMIT 3
+
+
+3. csak a crew=1-re szűrtem, mert nem volt teljesen érthető a kérdés, hogy mindennek 1-es értéket kell-e adni, vagy azok a kimenűfeltételre vonatkoztak:
+SELECT model AS Típus, cargo_capacity, passengers, max_atmosphering_speed,crew
+FROM transport
+WHERE crew = 1
+AND (manufacturer LIKE 'A%' OR manufacturer LIKE 'B%' OR manufacturer LIKE 'C%')
+
+Ha mindennél le kell szűrni hogy 1-legyen, akkor ez a lekérdezés kell, de itt nincs a szűrésnek megfelelő adat:
+SELECT model AS Típus
+FROM transport
+WHERE crew = 1
+AND cargo_capacity = 1
+AND passengers = 1
+AND max_atmosphering_speed = 1
+AND (manufacturer LIKE 'A%' OR manufacturer LIKE 'B%' OR manufacturer LIKE 'C%')
+
+
+4.
+SELECT *
+FROM transport
+WHERE manufacturer LIKE '%Corporation%'
+AND passengers > 0
+AND cost_in_credits BETWEEN 10000 AND 200000
+
+
+5.
+Kétféleképpen lehet értelmezni
+-a csoportosított adatok alapján a 3 véletlencserűen kihozott hajót íratom ki:
+SELECT model AS Megnevezés, manufacturer AS Gyártó
+FROM transport
+WHERE crew BETWEEN 1 AND 5
+AND passengers IS NOT NULL
+AND passengers <> 0
+AND cargo_capacity IS NOT NULL
+AND cargo_capacity <> 0
+GROUP BY crew
+
+Vagy hogy a crew alapján sorbarendezve íratom ki az első hármat:
+SELECT model AS Megnevezés, manufacturer AS Gyártó
+FROM transport
+WHERE crew BETWEEN 1 AND 5
+AND passengers IS NOT NULL
+AND passengers <> 0
+AND cargo_capacity IS NOT NULL
+AND cargo_capacity <> 0
+ORDER BY crew
+limit 3
+
